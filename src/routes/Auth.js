@@ -7,47 +7,27 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import React, { useState } from "react";
-
 const Auth = ({ isLoggedIn }) => {
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({ email: "", password: "", error: "" });
   const [newAccount, setNewAccount] = useState(false);
-  const [error, setError] = useState("");
   const onChange = ({ target: { name, value } }) =>
     setForm({ ...form, [name]: value });
-  const onSubmit = async (event) => {
-    event.preventDefault();
+  const onSubmit = async (e) => {
+    e.preventDefault();
     try {
-      let data;
-      if (newAccount) {
-        console.log(newAccount);
-        // create account
-        data = await createUserWithEmailAndPassword(
-          fAuth,
-          form.email,
-          form.password
-        );
-      } else {
-        // log in
-        data = await signInWithEmailAndPassword(
-          fAuth,
-          form.email,
-          form.password
-        );
-      }
-      console.log(data);
+      if (newAccount)
+        await createUserWithEmailAndPassword(fAuth, form.email, form.password);
+      if (!newAccount)
+        await signInWithEmailAndPassword(fAuth, form.email, form.password);
     } catch (error) {
-      setError(error.message);
+      setForm({ error: error.message });
     }
   };
-
   const toggleAccount = () => setNewAccount((prev) => !prev);
   const onSocialClick = async ({ target: { name } }) => {
     let provider;
-    if (name === "google") {
-      provider = new GoogleAuthProvider();
-    } else if (name === "github") {
-      provider = new GithubAuthProvider();
-    }
+    if (name === "google") provider = new GoogleAuthProvider();
+    if (name === "github") provider = new GithubAuthProvider();
     const data = await signInWithPopup(fAuth, provider);
     console.log(data);
   };
@@ -74,7 +54,7 @@ const Auth = ({ isLoggedIn }) => {
           type="submit"
           value={newAccount ? "Create New Account " : "Log in"}
         />
-        {error}
+        {form.error}
       </form>
       <span onClick={toggleAccount}>
         {newAccount ? "Log in" : "Create Account"}
@@ -90,5 +70,4 @@ const Auth = ({ isLoggedIn }) => {
     </div>
   );
 };
-
 export default Auth;
