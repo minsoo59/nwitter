@@ -2,7 +2,6 @@ import { dbService } from "fBase";
 import { addDoc, collection, onSnapshot, orderBy } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import Nweet from "components/Nweet";
-
 const Home = ({ userObj }) => {
   const [nweet, setNweet] = useState("");
   const [nweets, setNweets] = useState([]);
@@ -17,13 +16,13 @@ const Home = ({ userObj }) => {
   //   });
   // };
   useEffect(() => {
-    // getNweets(); // ForEach 쓰는 방법
+    // getNweets(); ForEach 쓰는 방법
     onSnapshot(collection(dbService, "nweets"), (snapshot) => {
       const nweetArray = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      setNweets(nweetArray);
+      setNweets(nweetArray); // map
     });
   }, []);
   const onSubmit = async (e) => {
@@ -38,7 +37,6 @@ const Home = ({ userObj }) => {
     } catch (error) {
       console.error("Error adding document: ", error);
     }
-
     setNweet("");
   };
   const onChange = ({ target: { value } }) => {

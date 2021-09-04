@@ -29,10 +29,9 @@ const Auth = ({ isLoggedIn }) => {
     if (name === "google") provider = new GoogleAuthProvider();
     if (name === "github") provider = new GithubAuthProvider();
     const data = await signInWithPopup(fAuth, provider);
-    console.log(data);
   };
   return (
-    <div>
+    <>
       <form onSubmit={onSubmit}>
         <input
           name="email"
@@ -67,7 +66,7 @@ const Auth = ({ isLoggedIn }) => {
           Continue with Github
         </button>
       </div>
-    </div>
+    </>
   );
 };
 export default Auth;
