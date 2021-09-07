@@ -6,7 +6,7 @@ import { ref, uploadString, getDownloadURL } from "@firebase/storage";
 const Home = ({ userObj }) => {
   const [nweet, setNweet] = useState("");
   const [nweets, setNweets] = useState([]);
-  const [attachment, setAttachment] = useState();
+  const [attachment, setAttachment] = useState("");
   // const getNweets = async () => {
   //   const dbNweets = await getDocs(collection(dbService, "nweets"));
   //   dbNweets.forEach((doc) => {
