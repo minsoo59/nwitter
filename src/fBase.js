@@ -1,6 +1,21 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+import { refFromURL, Database } from "firebase/database";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import {
+  getFirestore,
+  deleteDoc,
+  doc,
+  updateDoc,
+  addDoc,
+  onSnapshot,
+  collection,
+} from "firebase/firestore";
+
 const {
   REACT_APP_API_KEY,
   REACT_APP_AUTH_DOMAIN,
@@ -18,7 +33,17 @@ const firebaseConfig = {
   appId: REACT_APP_APP_ID,
 };
 
-initializeApp(firebaseConfig);
-
+const firebaseApp = initializeApp(firebaseConfig);
+export const storage = getStorage(firebaseApp);
 export const auth = getAuth();
 export const dbService = getFirestore();
+
+export const deleteNweet = deleteDoc;
+export const docNweet = doc;
+export const updateNweet = updateDoc;
+export const addNweet = addDoc;
+export const realtimeNweet = onSnapshot;
+export const collec = collection;
+
+export const join = createUserWithEmailAndPassword;
+export const login = signInWithEmailAndPassword;

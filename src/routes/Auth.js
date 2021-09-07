@@ -1,9 +1,7 @@
-import { auth as fAuth } from "fBase";
+import { auth as fAuth, join, login } from "fBase";
 import {
-  createUserWithEmailAndPassword,
   GithubAuthProvider,
   GoogleAuthProvider,
-  signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
 import React, { useState } from "react";
@@ -15,10 +13,8 @@ const Auth = ({ isLoggedIn }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (newAccount)
-        await createUserWithEmailAndPassword(fAuth, form.email, form.password);
-      if (!newAccount)
-        await signInWithEmailAndPassword(fAuth, form.email, form.password);
+      if (newAccount) await join(fAuth, form.email, form.password);
+      if (!newAccount) await login(fAuth, form.email, form.password);
     } catch (error) {
       setForm({ error: error.message });
     }
@@ -28,7 +24,7 @@ const Auth = ({ isLoggedIn }) => {
     let provider;
     if (name === "google") provider = new GoogleAuthProvider();
     if (name === "github") provider = new GithubAuthProvider();
-    const data = await signInWithPopup(fAuth, provider);
+    await signInWithPopup(fAuth, provider);
   };
   return (
     <>
