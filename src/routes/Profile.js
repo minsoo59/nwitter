@@ -4,7 +4,7 @@ import { auth as fAuth, collec, dbService } from "fBase";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
-export default ({ userObj }) => {
+const Profile = ({ refreshUser, userObj }) => {
   const [newDisplayName, setDisplayName] = useState(userObj.displayName);
   const [photoURL, setPhotoURL] = useState("");
   const history = useHistory();
@@ -18,7 +18,7 @@ export default ({ userObj }) => {
       where("creatorId", "==", userObj.uid),
       orderBy("createdAt", "desc")
     );
-    const nweets = await getDocs(queryNwts);
+    await getDocs(queryNwts);
   };
 
   const onChange = ({ target: { value } }) => {
@@ -31,6 +31,7 @@ export default ({ userObj }) => {
         displayName: newDisplayName,
         photoURL: userObj.photoURL,
       });
+      refreshUser();
     }
   };
 
@@ -58,13 +59,13 @@ export default ({ userObj }) => {
           />
           {photoURL ? (
             <>
-              <img src={photoURL} width="50px" height="50px" />
+              <img src={photoURL} width="50px" height="50px" alt="" />
               <button onClick={onClearPhoto}>Clear</button>
             </>
           ) : (
             userObj.photoURL && (
               <>
-                <img src={userObj.photoURL} width="50px" height="50px" />
+                <img src={userObj.photoURL} width="50px" height="50px" alt="" />
                 <button onClick={onClearPhoto}>Clear</button>
               </>
             )
@@ -82,3 +83,5 @@ export default ({ userObj }) => {
     </>
   );
 };
+
+export default Profile;
