@@ -3,7 +3,8 @@ import { getDocs, orderBy, query, where } from "@firebase/firestore";
 import { auth as fAuth, collec, dbService } from "fBase";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 const Profile = ({ refreshUser, userObj }) => {
   const [newDisplayName, setDisplayName] = useState(userObj.displayName);
   const [photoURL, setPhotoURL] = useState("");
@@ -49,38 +50,77 @@ const Profile = ({ refreshUser, userObj }) => {
   }, []);
   const onClearPhoto = () => setPhotoURL(null);
   return (
-    <>
-      <form onSubmit={onSubmit}>
+    <div className="container">
+      <form onSubmit={onSubmit} className="profileForm">
         <>
+          <label htmlFor="attach-file" className="factoryInput__label">
+            <span>Add photos</span>
+            <FontAwesomeIcon icon={faPlus} />
+          </label>
           <input
+            id="attach-file"
             type="file"
             accept="image/profile/*"
             onChange={onProfileChange}
+            style={{
+              opacity: 0,
+            }}
           />
           {photoURL ? (
             <>
-              <img src={photoURL} width="50px" height="50px" alt="" />
-              <button onClick={onClearPhoto}>Clear</button>
+              <img
+                src={photoURL}
+                style={{
+                  backgroundImage: photoURL,
+                }}
+                alt=""
+              />
+              <div className="factoryForm__clear" onClick={onClearPhoto}>
+                <span className="clear">Remove</span>
+                <FontAwesomeIcon icon={faTimes} />
+              </div>
             </>
           ) : (
             userObj.photoURL && (
               <>
-                <img src={userObj.photoURL} width="50px" height="50px" alt="" />
-                <button onClick={onClearPhoto}>Clear</button>
+                <img
+                  src={userObj.photoURL}
+                  style={{
+                    backgroundImage: userObj.photoURL,
+                  }}
+                  alt=""
+                />
+                <div className="factoryForm__clear" onClick={onClearPhoto}>
+                  <span className="clear">Remove</span>
+                  <FontAwesomeIcon icon={faTimes} />
+                </div>
               </>
             )
           )}
         </>
-        <input
-          type="text"
-          placeholder="Display name"
-          value={newDisplayName}
-          onChange={onChange}
-        />
-        <input type="submit" value="Update Profile" />
+        <>
+          <input
+            type="text"
+            placeholder="Display name"
+            value={newDisplayName}
+            onChange={onChange}
+            className="formInput"
+            autoFocus
+          />
+          <input
+            type="submit"
+            value="Update Profile"
+            className="formBtn"
+            style={{
+              marginTop: 10,
+            }}
+          />
+        </>
       </form>
-      <button onClick={onLogOutClick}>Log out</button>
-    </>
+      <span className="formBtn cancelBtn logOut" onClick={onLogOutClick}>
+        Log Out
+      </span>
+    </div>
   );
 };
 
